@@ -1,0 +1,118 @@
+[gd_scene load_steps=7 format=3 uid="uid://cd3holytf3ujf"]
+
+[ext_resource type="Script" path="res://scripts/control.gd" id="1_02hwq"]
+[ext_resource type="FontFile" uid="uid://de7nspnoaske8" path="res://assets/GrapeSoda.ttf" id="1_oqxhu"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vuu1r"]
+bg_color = Color(0.36, 0.36, 0.36, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lls4e"]
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_afbdr"]
+bg_color = Color(0.359069, 0.359069, 0.359069, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kvugl"]
+bg_color = Color(0.497474, 0.497474, 0.497474, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[node name="menu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1.0
+offset_right = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_02hwq")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_vuu1r")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -132.0
+offset_top = -78.0
+offset_right = 132.0
+offset_bottom = 158.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 26
+
+[node name="startBtn" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.00784314, 0.411765, 0.368627, 1)
+theme_override_font_sizes/font_size = 40
+theme_override_styles/hover = SubResource("StyleBoxFlat_lls4e")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_afbdr")
+theme_override_styles/normal = SubResource("StyleBoxFlat_kvugl")
+text = "START GAME"
+
+[node name="creditsBtn" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.00815171, 0.413186, 0.367597, 1)
+theme_override_font_sizes/font_size = 40
+theme_override_styles/hover = SubResource("StyleBoxFlat_lls4e")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_afbdr")
+theme_override_styles/normal = SubResource("StyleBoxFlat_kvugl")
+text = "CREDITS
+"
+
+[node name="quitBtn" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.00784314, 0.411765, 0.368627, 1)
+theme_override_font_sizes/font_size = 40
+theme_override_styles/hover = SubResource("StyleBoxFlat_lls4e")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_afbdr")
+theme_override_styles/normal = SubResource("StyleBoxFlat_kvugl")
+text = "QUIT GAME"
+
+[node name="mainMenuLbl" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -266.0
+offset_top = -259.0
+offset_right = 266.0
+offset_bottom = -156.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_y = 10
+theme_override_fonts/font = ExtResource("1_oqxhu")
+theme_override_font_sizes/font_size = 100
+text = "MAIN MENU"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="VBoxContainer/startBtn" to="." method="_on_start_btn_pressed"]
+[connection signal="pressed" from="VBoxContainer/creditsBtn" to="." method="_on_credits_btn_pressed"]
+[connection signal="pressed" from="VBoxContainer/quitBtn" to="." method="_on_quit_btn_pressed"]
