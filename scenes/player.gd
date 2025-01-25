@@ -1,57 +1,55 @@
 extends CharacterBody2D
 
-const MAX_SPEED = 500.0
-const ACCELERATION = 200.0
-const FRICTION = 50.0
-const ROTATION_SPEED = 100.0 # How quickly the car rotates
+var wheel_base = 70
+var steering_angle = 15
+var engine_power = 900
+var friction = -55
+var drag = -0.06
+var braking = -450
+var max_speed_reverse = 250
+var slip_speed = 400
+var traction_fast = 2.5
+var traction_slow = 10
 
-# Initial velocity
-#var velocity: Vector2 = Vector2.ZERO
+var acceleration = Vector2.ZERO
+var steer_direction
 
-func _physics_process(delta: float) -> void:
-    var input_vector: Vector2 = Vector2.ZERO
-
-    # Collect input for vertical movement (up/down)
-    if Input.is_action_pressed("ui_up"):
-        input_vector.y -= 1 # Move up (negative y-direction)
-    if Input.is_action_pressed("ui_down"):
-        input_vector.y += 1 # Move down (positive y-direction)
-
-    # Collect input for horizontal movement (left/right)
-    if Input.is_action_pressed("ui_left"):
-        input_vector.x -= 1 # Move left (negative x-direction)
-    if Input.is_action_pressed("ui_right"):
-        input_vector.x += 1 # Move right (positive x-direction)
-
-    # Normalize input_vector to handle diagonal movement
-    input_vector = input_vector.normalized()
-
-    # Apply acceleration to the velocity
-    velocity += input_vector * ACCELERATION * delta
-
-    # Apply friction when there's no input
-    if input_vector == Vector2.ZERO:
-        velocity = velocity.move_toward(Vector2.ZERO, FRICTION * delta)
-
-    # Limit speed to MAX_SPEED
-    if velocity.length() > MAX_SPEED:
-        velocity = velocity.normalized() * MAX_SPEED
-
-    # Handle rotation based on diagonal movement
-    if Input.is_action_pressed("ui_down") and Input.is_action_pressed("ui_right"):
-        # Rotate car 90 degrees anticlockwise for Down + Right
-        rotation = deg_to_rad(90) # Rotate to 90 degrees anticlockwise
-    elif Input.is_action_pressed("ui_down") and Input.is_action_pressed("ui_left"):
-        # Rotate car 90 degrees clockwise for Down + Left
-        rotation = deg_to_rad(-90) # Rotate to -90 degrees clockwise
-    elif Input.is_action_pressed("ui_up") and Input.is_action_pressed("ui_right"):
-        # Rotate car 45 degrees anticlockwise for Up + Right
-        rotation = deg_to_rad(45)
-    elif Input.is_action_pressed("ui_up") and Input.is_action_pressed("ui_left"):
-        # Rotate car 45 degrees clockwise for Up + Left
-        rotation = deg_to_rad(-45)
-    else:
-        # No diagonal input, reset rotation to 0 (straight direction)
-        rotation = 0
-    # Move the car using the calculated velocity
-    move_and_slide()
+func _physics_process(delta):
+	acceleration = Vector2.ZERO
+	get_input()
+	apply_friction(delta)
+	calculate_steering(delta)
+	velocity += acceleration * delta
+	move_and_slide()
+	
+func apply_friction(delta):
+	if acceleration == Vector2.ZERO and velocity.length() < 50:
+		velocity = Vector2.ZERO
+	var friction_force = velocity * friction * delta
+	var drag_force = velocity * velocity.length() * drag * delta
+	acceleration += drag_force + friction_force
+	
+func get_input():
+	var turn = Input.get_axis("ui_left", "ui_right")
+	steer_direction = turn * deg_to_rad(steering_angle)
+	if Input.is_action_pressed("ui_up"):
+		acceleration = transform.x * engine_power
+	if Input.is_action_pressed("ui_down"):
+		acceleration = transform.x * braking
+	
+func calculate_steering(delta):
+	var rear_wheel = position - transform.x * wheel_base / 2.0
+	var front_wheel = position + transform.x * wheel_base / 2.0
+	rear_wheel += velocity * delta
+	front_wheel += velocity.rotated(steer_direction) * delta
+	var new_heading = rear_wheel.direction_to(front_wheel)
+	var traction = traction_slow
+	if velocity.length() > slip_speed:
+		traction = traction_fast
+	var d = new_heading.dot(velocity.normalized())
+	if d > 0:
+		velocity = lerp(velocity, new_heading * velocity.length(), traction * delta)
+	if d < 0:
+		velocity = -new_heading * min(velocity.length(), max_speed_reverse)
+#	velocity = new_heading * velocity.length()
+	rotation = new_heading.angle()
