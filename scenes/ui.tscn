@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=3 uid="uid://cdkx41p1y3non"]
+
+[ext_resource type="Script" path="res://scripts/pause.gd" id="1_o4xqc"]
+[ext_resource type="Texture2D" uid="uid://cym0vunyj0cfr" path="res://assets/Hover@2x.png" id="1_x4fdd"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_ruqij"]
+load_path = "res://.godot/imported/Default@2x.png-8817c0a6c9e463050a6f2b6c57bdf698.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_wqk3q"]
+load_path = "res://.godot/imported/Default@2x.png-8817c0a6c9e463050a6f2b6c57bdf698.ctex"
+
+[node name="ui" type="CanvasLayer"]
+script = ExtResource("1_o4xqc")
+
+[node name="pause" type="TextureButton" parent="."]
+offset_left = 1078.0
+offset_top = 20.0
+offset_right = 1238.0
+offset_bottom = 186.0
+scale = Vector2(0.35, 0.35)
+texture_normal = SubResource("CompressedTexture2D_ruqij")
+texture_pressed = SubResource("CompressedTexture2D_wqk3q")
+texture_hover = ExtResource("1_x4fdd")
+
+[connection signal="pressed" from="pause" to="." method="_on_pause_pressed"]
