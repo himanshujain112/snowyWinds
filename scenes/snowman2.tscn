@@ -1,0 +1,24 @@
+[gd_scene load_steps=4 format=3 uid="uid://dtm7tindnfjjd"]
+
+[ext_resource type="Script" path="res://scripts/snowman.gd" id="1_07pth"]
+[ext_resource type="Texture2D" uid="uid://c3jkg6pw4npmx" path="res://assets/spritesheet.png" id="1_t3jl4"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_vye0r"]
+radius = 20.0
+height = 56.0
+
+[node name="snowman1" type="RigidBody2D" groups=["snowman"]]
+gravity_scale = 0.0
+script = ExtResource("1_07pth")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+scale = Vector2(1.4, 1.4)
+texture = ExtResource("1_t3jl4")
+hframes = 16
+vframes = 8
+frame = 16
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-1, 11)
+shape = SubResource("CapsuleShape2D_vye0r")
