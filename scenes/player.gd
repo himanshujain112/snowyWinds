@@ -38,7 +38,7 @@ func get_input():
 
 	if Input.is_action_just_pressed("ui_select"):
 		fireSnowBalls()
-		await get_tree().create_timer(2).timeout
+		
 
 func changeAnimation():
 	if velocity.x < 0:
@@ -56,3 +56,4 @@ func fireSnowBalls():
 	get_parent().add_child(snowBall)
 	snowBall.position.x = self.position.x
 	snowBall.position.y = self.position.y - 20
+	await get_tree().create_timer(3).timeout
